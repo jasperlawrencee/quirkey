@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "15781080528",
+    "project_id": "quirkey-3ab2c",
+    "storage_bucket": "quirkey-3ab2c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15781080528:android:57961d0bac09f2faaaddd5",
+        "android_client_info": {
+          "package_name": "com.example.quirkey"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhL_tkFlnLyp89cx-4v4po5srFowejqxU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

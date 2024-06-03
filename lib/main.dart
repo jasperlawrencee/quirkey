@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:quirkey/components/constants.dart';
-import 'package:quirkey/master/master.dart';
+import 'package:quirkey/login/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,7 +39,7 @@ class MyApp extends StatelessWidget {
           fillColor: kPrimaryDarkColor,
         ),
       ),
-      home: const MasterPassword(),
+      home: const LoginPage(),
     );
   }
 }

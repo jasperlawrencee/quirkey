@@ -15,7 +15,7 @@ class _MasterPasswordState extends State<MasterPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black54,
+      backgroundColor: Colors.blueGrey,
       body: Container(
         padding: const EdgeInsets.all(defaultPadding),
         child: Center(
@@ -24,6 +24,7 @@ class _MasterPasswordState extends State<MasterPassword> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text('Vault is locked. Enter your main password',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
@@ -42,7 +43,10 @@ class _MasterPasswordState extends State<MasterPassword> {
                     const SizedBox(height: defaultPadding),
                     ElevatedButton(
                       onPressed: () {},
-                      child: const Text('Unlock'),
+                      child: const Text(
+                        'Unlock',
+                        style: TextStyle(color: kPrimaryColor),
+                      ),
                     )
                   ],
                 ),
