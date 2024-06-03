@@ -1,8 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:quirkey/components/constants.dart';
+import 'package:quirkey/firebase_options.dart';
+import 'package:quirkey/homepage/home.dart';
 import 'package:quirkey/login/login.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -39,7 +47,17 @@ class MyApp extends StatelessWidget {
           fillColor: kPrimaryDarkColor,
         ),
       ),
-      home: const LoginPage(),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            //user is not logged in
+            return const LoginPage();
+          } else {
+            return const HomePage(); //
+          }
+        },
+      ),
     );
   }
 }
