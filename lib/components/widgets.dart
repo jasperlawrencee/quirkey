@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quirkey/components/constants.dart';
 
 Widget textField({
+  String? Function(String?)? validator,
   required bool isPassword,
   required TextEditingController controller,
   required String hintText,
@@ -22,6 +23,7 @@ Widget textField({
       ],
     ),
     child: TextFormField(
+      validator: validator,
       controller: controller,
       obscureText: isPassword,
       style: const TextStyle(color: Colors.white),
