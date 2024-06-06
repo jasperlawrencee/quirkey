@@ -5,7 +5,6 @@ import 'package:quirkey/components/constants.dart';
 import 'package:quirkey/components/functions.dart';
 import 'package:quirkey/createMaster/createMaster.dart';
 import 'package:quirkey/firebase_options.dart';
-import 'package:quirkey/homepage/home.dart';
 import 'package:quirkey/login/login.dart';
 import 'package:quirkey/master/master.dart';
 
@@ -30,6 +29,9 @@ class MyApp extends StatelessWidget {
         primaryColor: kPrimaryColor,
         colorScheme: ColorScheme.fromSeed(seedColor: kPrimaryColor),
         useMaterial3: true,
+        dialogTheme: const DialogTheme(
+          shape: Border(),
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
           elevation: 0,

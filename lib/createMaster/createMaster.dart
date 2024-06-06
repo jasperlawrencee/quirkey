@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, file_names
 
 import 'dart:developer';
 
@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quirkey/components/constants.dart';
 import 'package:quirkey/components/widgets.dart';
-import 'package:quirkey/homepage/home.dart';
 import 'package:quirkey/master/master.dart';
 
 class CreateMaster extends StatefulWidget {

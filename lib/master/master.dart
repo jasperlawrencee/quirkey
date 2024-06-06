@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
 
 import 'dart:developer';
 
@@ -22,7 +22,6 @@ class MasterPassword extends StatefulWidget {
 class _MasterPasswordState extends State<MasterPassword> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController mainPasswordController = TextEditingController();
-  User? currentUser = auth.currentUser;
   String master = '';
 
   Future<void> getMasterPassword() async {
@@ -36,16 +35,16 @@ class _MasterPasswordState extends State<MasterPassword> {
   Future<void> submitMasterPassword() async {
     checkMasterPassword(
       mainPasswordController.text,
-      currentUser!.uid,
+      widget.currentUser!.uid,
     );
     if (await checkMasterPassword(
       mainPasswordController.text,
-      currentUser!.uid,
+      widget.currentUser!.uid,
     )) {
       Navigator.push(
           context,
           CupertinoPageRoute(
-            builder: (context) => const HomePage(),
+            builder: (context) => HomePage(currentUser: widget.currentUser),
           ));
     }
   }
@@ -53,6 +52,8 @@ class _MasterPasswordState extends State<MasterPassword> {
   String? verifyMasterPassword(String? input) {
     if (input != master) {
       return 'Wrong password';
+    } else {
+      return null;
     }
   }
 
