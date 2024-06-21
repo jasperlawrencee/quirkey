@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:quirkey/components/constants.dart';
 import 'package:quirkey/components/widgets.dart';
 import 'package:quirkey/master/master.dart';
@@ -25,12 +26,32 @@ class _CreateMasterState extends State<CreateMaster> {
   final TextEditingController masterController = TextEditingController();
   final TextEditingController verifyController = TextEditingController();
   bool isSubmitting = false;
+  bool isPassword = true;
 
   @override
   void dispose() {
     masterController.dispose();
     verifyController.dispose();
     super.dispose();
+  }
+
+  Future<void> verifyPassword(Function() submit) async {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        content: const Text(
+            "Submit your master password? This action is not changeable"),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Back')),
+          TextButton(onPressed: submit, child: const Text('Submit')),
+        ],
+      ),
+    );
   }
 
   Future<void> submitMasterPassword() async {
@@ -53,14 +74,14 @@ class _CreateMasterState extends State<CreateMaster> {
 
   Future<void> submitForm() async {
     if (formKey.currentState!.validate()) {
-      submitMasterPassword().then((value) => {
+      verifyPassword(() => submitMasterPassword().then((value) => {
             Navigator.push(
                 context,
                 CupertinoPageRoute(
                   builder: (context) =>
                       MasterPassword(currentUser: widget.currentUser),
                 ))
-          });
+          }));
       //push to home
     }
   }
@@ -104,29 +125,29 @@ class _CreateMasterState extends State<CreateMaster> {
                   key: formKey,
                   child: Column(
                     children: [
-                      textField(
+                      MasterPasswordTextField(
+                        isHidden: isPassword,
+                        controller: masterController,
+                        hintText: "Password",
                         validator: (p0) =>
                             validateMasterPassword(masterController.text),
-                        isPassword: true,
-                        controller: masterController,
-                        hintText: 'Password',
                       ),
                       const SizedBox(height: defaultPadding),
-                      textField(
-                        validator: (p0) =>
-                            validateConfirmPassword(masterController.text),
-                        isPassword: true,
+                      MasterPasswordTextField(
+                        isHidden: isPassword,
                         controller: verifyController,
-                        hintText: 'Verify Password',
-                      ),
-                      const SizedBox(height: defaultPadding),
-                      ElevatedButton(
-                          onPressed: isSubmitting ? null : submitForm,
-                          child: isSubmitting
-                              ? const LinearProgressIndicator()
-                              : const Text('Submit'))
+                        hintText: "Verify Password",
+                        validator: (p0) =>
+                            validateConfirmPassword(verifyController.text),
+                      )
                     ],
-                  ))
+                  )),
+              const SizedBox(height: defaultPadding),
+              ElevatedButton(
+                  onPressed: isSubmitting ? null : submitForm,
+                  child: isSubmitting
+                      ? const LinearProgressIndicator()
+                      : const Text('Submit'))
             ],
           ),
         ),

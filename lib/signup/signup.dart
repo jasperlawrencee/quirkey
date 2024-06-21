@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:quirkey/components/constants.dart';
 import 'package:quirkey/components/widgets.dart';
@@ -19,14 +18,22 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  Future<void> rowseGwapo(String docId, String email, String password) async {
+  Future<void> createUser() async {
     try {
-      FirebaseFirestore.instance.collection('users').doc(docId).set({
-        'email': email,
-        'password': password,
+      await firebaseServices
+          .signupWithEmailandPassword(
+              emailController.text, passwordController.text)
+          .then((value) {
+        log('created account');
+        Navigator.pop(context);
+        db.collection('users').doc(value!.uid).set({
+          'email': value.email,
+          'password': passwordController.text,
+          'role': "customer"
+        });
       });
     } catch (e) {
-      log('error adding user details $e');
+      log('error signing up $e');
     }
   }
 
@@ -67,17 +74,7 @@ class _SignupPageState extends State<SignupPage> {
                     ],
                   )),
               ElevatedButton(
-                  onPressed: () async {
-                    await firebaseServices
-                        .signupWithEmailandPassword(
-                            emailController.text, passwordController.text)
-                        .then((value) {
-                      log('created account');
-                      Navigator.pop(context);
-                      rowseGwapo(value!.uid, emailController.text,
-                          passwordController.text);
-                    });
-                  },
+                  onPressed: createUser,
                   child: const Text(
                     'Register Account',
                     style: TextStyle(color: kPrimaryColor),
