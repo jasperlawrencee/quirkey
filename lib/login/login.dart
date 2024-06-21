@@ -5,9 +5,9 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:quirkey/components/constants.dart';
-import 'package:quirkey/components/functions.dart';
-import 'package:quirkey/components/widgets.dart';
+import 'package:quirkey/utils/constants.dart';
+import 'package:quirkey/utils/functions.dart';
+import 'package:quirkey/utils/widgets.dart';
 import 'package:quirkey/createMaster/createMaster.dart';
 import 'package:quirkey/features/firebase_services.dart';
 import 'package:quirkey/master/master.dart';
@@ -106,15 +106,15 @@ class _LoginPageState extends State<LoginPage> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: defaultPadding),
-              textField(
-                  isPassword: false,
+              QTextField(
                   controller: emailController,
-                  hintText: 'Email'),
+                  hintText: "Email",
+                  isPassword: false),
               const SizedBox(height: defaultPadding),
-              textField(
-                  isPassword: true,
+              QTextField(
                   controller: passwordController,
-                  hintText: 'Password'),
+                  hintText: "Password",
+                  isPassword: true),
               const SizedBox(height: defaultPadding),
               ElevatedButton(
                   onPressed: isLoading ? null : loginAndRoute,

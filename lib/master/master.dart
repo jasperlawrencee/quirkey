@@ -6,9 +6,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:quirkey/components/constants.dart';
-import 'package:quirkey/components/functions.dart';
-import 'package:quirkey/components/widgets.dart';
+import 'package:quirkey/utils/constants.dart';
+import 'package:quirkey/utils/functions.dart';
+import 'package:quirkey/utils/widgets.dart';
 import 'package:quirkey/homepage/home.dart';
 
 class MasterPassword extends StatefulWidget {
@@ -88,12 +88,12 @@ class _MasterPasswordState extends State<MasterPassword> {
                   children: [
                     Form(
                         key: formKey,
-                        child: textField(
+                        child: MasterPasswordTextField(
+                          isHidden: true,
+                          controller: mainPasswordController,
+                          hintText: 'Master Password',
                           validator: (p0) =>
                               verifyMasterPassword(mainPasswordController.text),
-                          isPassword: true,
-                          controller: mainPasswordController,
-                          hintText: 'Enter Master Password',
                         )),
                     const SizedBox(height: defaultPadding),
                     ElevatedButton(

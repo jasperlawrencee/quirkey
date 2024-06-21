@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:quirkey/components/constants.dart';
-import 'package:quirkey/components/functions.dart';
+import 'package:quirkey/utils/constants.dart';
+import 'package:quirkey/utils/functions.dart';
 import 'package:quirkey/createMaster/createMaster.dart';
 import 'package:quirkey/firebase_options.dart';
 import 'package:quirkey/login/login.dart';

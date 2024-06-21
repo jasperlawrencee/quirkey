@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:quirkey/components/constants.dart';
-import 'package:quirkey/components/widgets.dart';
+import 'package:quirkey/utils/constants.dart';
 import 'package:quirkey/features/firebase_services.dart';
+import 'package:quirkey/utils/widgets.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -61,15 +61,15 @@ class _SignupPageState extends State<SignupPage> {
                   child: Column(
                     children: [
                       const SizedBox(height: defaultPadding),
-                      textField(
-                          isPassword: false,
+                      QTextField(
                           controller: emailController,
-                          hintText: "Email"),
+                          hintText: "Email",
+                          isPassword: false),
                       const SizedBox(height: defaultPadding),
-                      textField(
-                          isPassword: true,
+                      QTextField(
                           controller: passwordController,
-                          hintText: "Password"),
+                          hintText: "Password",
+                          isPassword: true),
                       const SizedBox(height: defaultPadding),
                     ],
                   )),

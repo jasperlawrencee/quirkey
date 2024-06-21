@@ -1,8 +1,12 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:quirkey/components/constants.dart';
+import 'package:quirkey/addPassword/addPassword.dart';
+import 'package:quirkey/utils/constants.dart';
+import 'package:quirkey/utils/functions.dart';
+import 'package:quirkey/utils/widgets.dart';
 import 'package:quirkey/login/login.dart';
 
 class HomePage extends StatefulWidget {
@@ -36,18 +40,17 @@ class _HomePageState extends State<HomePage> {
         if (didPop) {
           return;
         }
-        showPopDialog();
+        showPopDialog(context, logoutAndReturnToLogin);
       },
       child: Scaffold(
+          drawer: SideBar(
+            currentUser: widget.currentUser,
+          ),
           appBar: AppBar(
             backgroundColor: kPrimaryDarkColor,
             foregroundColor: kBackgroundColor,
             centerTitle: true,
             title: const Text('All Entries'),
-            leading: IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
-            actions: [
-              IconButton(onPressed: () {}, icon: const Icon(Icons.search))
-            ],
           ),
           body: Container(
             padding: const EdgeInsets.all(defaultPadding),
@@ -62,34 +65,16 @@ class _HomePageState extends State<HomePage> {
           floatingActionButton: FloatingActionButton(
               shape: const CircleBorder(),
               foregroundColor: kPrimaryColor,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (context) => AddPassword(
+                        currentUser: widget.currentUser,
+                      ),
+                    ));
+              },
               child: const Icon(Icons.add))),
-    );
-  }
-
-  Future<void> showPopDialog() async {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text(
-          'Confirm Log Out?',
-          style: TextStyle(fontSize: 16),
-        ),
-        content: const Text('This action will log you out, proceed log out?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('BACK'),
-          ),
-          TextButton(
-            onPressed: logoutAndReturnToLogin,
-            child: const Text('CONFIRM'),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -1,7 +1,8 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:quirkey/components/constants.dart';
+import 'package:flutter/material.dart';
+import 'package:quirkey/utils/constants.dart';
 
 Future<bool> checkMasterPassword(String input, String id) async {
   try {
@@ -33,6 +34,34 @@ Future<bool?> checkMasterPasswordExists(String id) async {
     }
   } catch (e) {
     log('error getting master password $e');
+    await auth.signOut();
     return null;
   }
+}
+
+Future<void> showPopDialog(
+    BuildContext context, void Function() logoutAndReturnToLogin) async {
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text(
+        'Confirm Log Out?',
+        style: TextStyle(fontSize: 16),
+      ),
+      content: const Text('This action will log you out, proceed log out?'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('BACK'),
+        ),
+        TextButton(
+          onPressed: logoutAndReturnToLogin,
+          child: const Text('CONFIRM'),
+        ),
+      ],
+    ),
+  );
 }

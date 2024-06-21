@@ -6,8 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:quirkey/components/constants.dart';
-import 'package:quirkey/components/widgets.dart';
+import 'package:quirkey/utils/constants.dart';
+import 'package:quirkey/utils/widgets.dart';
 import 'package:quirkey/master/master.dart';
 
 class CreateMaster extends StatefulWidget {
