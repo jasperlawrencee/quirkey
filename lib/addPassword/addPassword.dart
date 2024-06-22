@@ -1,10 +1,10 @@
 // ignore_for_file: must_be_immutable, non_constant_identifier_names
 
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:quirkey/utils/constants.dart';
 import 'package:quirkey/utils/widgets.dart';
 
@@ -23,6 +23,7 @@ class _AddPasswordState extends State<AddPassword> {
   List<String> types = <String>["Account", "Address", "Bank", "Notes"];
   String typesDropdownValue = "Account";
   String countryDropdownValue = countryList.first;
+  String title = 'Entry title';
   final TextEditingController titleController = TextEditingController();
   final TextEditingController loginController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -54,8 +55,11 @@ class _AddPasswordState extends State<AddPassword> {
         centerTitle: true,
         title: const Text('New Entry'),
       ),
-      floatingActionButton:
-          FloatingActionButton.extended(onPressed: () {}, label: Text('Add +')),
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            log('add method here');
+          },
+          label: const Text('Add +')),
       backgroundColor: Colors.blueGrey,
       body: SingleChildScrollView(
         child: Container(
@@ -64,9 +68,18 @@ class _AddPasswordState extends State<AddPassword> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const Text(
-                'Type',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              InkWell(
+                onTap: () {
+                  log('pressed title');
+                },
+                child: Wrap(
+                  direction: Axis.horizontal,
+                  children: [
+                    Text(title),
+                    const SizedBox(width: defaultPadding / 3),
+                    const Icon(Icons.edit_note_outlined),
+                  ],
+                ),
               ),
               const SizedBox(height: defaultPadding / 2),
               QStringDropDown(
@@ -78,13 +91,6 @@ class _AddPasswordState extends State<AddPassword> {
                   });
                 },
               ),
-              const SizedBox(height: defaultPadding),
-              LabeledWidget(
-                  label: 'Title',
-                  widget: QTextField(
-                      controller: titleController,
-                      hintText: 'Title',
-                      isPassword: false)),
               const SizedBox(height: defaultPadding),
               if (typesDropdownValue == "Account") ...[
                 Column(

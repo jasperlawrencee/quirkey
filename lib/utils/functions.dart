@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -10,15 +10,12 @@ Future<bool> checkMasterPassword(String input, String id) async {
         await db.collection('users').doc(id).get();
     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
     if (input == data['masterPassword']) {
-      log('correct master password');
-      return true;
+      return true; //correct password
     } else {
-      log('wrong master password');
-      return false;
+      return false; //wrong password
     }
   } catch (e) {
-    log('error checking master password $e');
-    return false;
+    return false; //error checking password
   }
 }
 
@@ -33,7 +30,7 @@ Future<bool?> checkMasterPasswordExists(String id) async {
       return false; //false if master password is not existing
     }
   } catch (e) {
-    log('error getting master password $e');
+    //default error
     await auth.signOut();
     return null;
   }
@@ -64,4 +61,18 @@ Future<void> showPopDialog(
       ],
     ),
   );
+}
+
+Future<String> generatePassword() async {
+  const chars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  Random rand = Random();
+  //random generated password
+  String password = String.fromCharCodes(Iterable.generate(
+    16, //sets maximum character count to value
+    (index) => chars.codeUnitAt(rand.nextInt(chars.length)),
+    //gives a random element of the string "chars" declared above and iterates it resulting a string
+  ));
+  print(password);
+  return password;
 }
