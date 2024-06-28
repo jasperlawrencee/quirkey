@@ -56,9 +56,19 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(defaultPadding),
             decoration: const BoxDecoration(color: Colors.blueGrey),
             child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [],
+              child: FutureBuilder(
+                future: getEntries(widget.currentUser!.uid),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const CircularProgressIndicator();
+                  } else {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) =>
+                          Text(snapshot.data!.toString()),
+                    );
+                  }
+                },
               ),
             ),
           ),

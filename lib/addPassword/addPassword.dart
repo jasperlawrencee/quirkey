@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quirkey/utils/constants.dart';
+import 'package:quirkey/utils/functions.dart';
 import 'package:quirkey/utils/widgets.dart';
 
 class AddPassword extends StatefulWidget {
@@ -43,8 +44,9 @@ class _AddPasswordState extends State<AddPassword> {
   final TextEditingController pinController = TextEditingController();
   final TextEditingController banknameController = TextEditingController();
   final TextEditingController customerPhoneController = TextEditingController();
-  final TextEditingController commendController = TextEditingController();
+  final TextEditingController commentController = TextEditingController();
   final TextEditingController notesController = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -56,10 +58,90 @@ class _AddPasswordState extends State<AddPassword> {
         title: const Text('New Entry'),
       ),
       floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            log('add method here');
-          },
-          label: const Text('Add +')),
+          onPressed: isLoading
+              ? null
+              : () {
+                  if (typesDropdownValue.toLowerCase() == 'account' &&
+                      loginController.text.isNotEmpty &&
+                      passwordController.text.isNotEmpty) {
+                    addAccountEntry(
+                            //add login entry
+                            login: loginController.text,
+                            password: passwordController.text,
+                            title: title,
+                            details: detailsController.text)
+                        .then((value) {
+                      loginController.clear();
+                      passwordController.clear();
+                      detailsController.clear();
+                      Navigator.pop(context);
+                      setState(() {});
+                    });
+                  } else if (typesDropdownValue.toLowerCase() == 'address' &&
+                      stateprovinceController.text.isNotEmpty &&
+                      cityController.text.isNotEmpty &&
+                      postalCodeController.text.isNotEmpty &&
+                      streetController.text.isNotEmpty) {
+                    addAddress(
+                            //add address entry
+                            region: countryDropdownValue,
+                            state: stateprovinceController.text,
+                            city: cityController.text,
+                            postal: postalCodeController.text,
+                            street: streetController.text,
+                            title: title)
+                        .then((value) {
+                      stateprovinceController.clear();
+                      cityController.clear();
+                      postalCodeController.clear();
+                      streetController.clear();
+                      Navigator.pop(context);
+                      setState(() {});
+                    });
+                  } else if (typesDropdownValue.toLowerCase() == 'bank' &&
+                      cardNumberController.text.isNotEmpty &&
+                      mmController.text.isNotEmpty &&
+                      yyController.text.isNotEmpty &&
+                      securityNumController.text.isNotEmpty) {
+                    addBank(
+                      //add bank entry
+                      cardNumber: cardNumberController.text,
+                      month: mmController.text,
+                      year: yyController.text,
+                      security: securityNumController.text,
+                      title: title,
+                      cardIssuer: cardHolderController.text,
+                      comment: commentController.text,
+                      pin: pinController.text,
+                      supportNumber: customerPhoneController.text,
+                    ).then((value) {
+                      cardNumberController.clear();
+                      mmController.clear();
+                      yyController.clear();
+                      securityNumController.clear();
+                      cardHolderController.clear();
+                      commentController.clear();
+                      pinController.clear();
+                      customerPhoneController.clear();
+                      Navigator.pop(context);
+                      setState(() {});
+                    });
+                  } else if (typesDropdownValue.toLowerCase() == 'notes' &&
+                      notesController.text.isNotEmpty) {
+                    addNotesEntry(
+                            //add notes entry
+                            notes: notesController.text,
+                            title: title)
+                        .then((value) {
+                      notesController.clear();
+                      Navigator.pop(context);
+                      setState(() {});
+                    });
+                  }
+                },
+          label: isLoading
+              ? const CircularProgressIndicator()
+              : const Text('Add +')),
       backgroundColor: Colors.blueGrey,
       body: SingleChildScrollView(
         child: Container(
@@ -95,6 +177,14 @@ class _AddPasswordState extends State<AddPassword> {
               if (typesDropdownValue == "Account") ...[
                 Column(
                   children: [
+                    LabeledWidget(
+                      label: 'Details',
+                      widget: QTextField(
+                          controller: detailsController,
+                          hintText: "www.example.com (Optional)",
+                          isPassword: false),
+                    ),
+                    const SizedBox(height: defaultPadding),
                     LabeledWidget(
                       label: 'Login',
                       widget: QTextField(

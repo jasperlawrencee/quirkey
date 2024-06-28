@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:quirkey/utils/constants.dart';
+import 'package:quirkey/utils/models.dart';
 
 Future<bool> checkMasterPassword(String input, String id) async {
   try {
@@ -75,4 +76,130 @@ Future<String> generatePassword() async {
   ));
   print(password);
   return password;
+}
+
+Future<void> addNotesEntry({
+  required String notes,
+  required String title,
+}) async {
+  try {
+    await db
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('entries')
+        .add({
+      "title": title,
+      "type": "notes",
+      "value": notes,
+    }).then((value) => print('done'));
+  } catch (e) {
+    print('error adding notes');
+  }
+}
+
+Future<void> addAccountEntry({
+  required String login,
+  required String password,
+  required String title,
+  required String details,
+}) async {
+  try {
+    await db
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('entries')
+        .add({
+      "details": details,
+      "login": login,
+      "password": password,
+      "title": title,
+      "type": "account",
+    }).then((value) => print('done'));
+  } catch (e) {
+    print('error adding account');
+  }
+}
+
+Future<void> addAddress({
+  required String region,
+  required String state,
+  required String city,
+  required String postal,
+  required String street,
+  required String title,
+  String? firstname,
+  String? lastname,
+  String? middlename,
+}) async {
+  try {
+    await db
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('entries')
+        .add({
+      "region": region,
+      "state": state,
+      "city": city,
+      "postalCode": postal,
+      "street": street,
+      "title": title,
+      "firstName": firstname ?? '',
+      "lastName": lastname ?? '',
+      "middleName": middlename ?? '',
+      "type": "address",
+    }).then((value) => print('done'));
+  } catch (e) {
+    print('error adding address');
+  }
+}
+
+Future<void> addBank({
+  required String cardNumber,
+  required String month,
+  required String year,
+  required String security,
+  required String title,
+  String? pin,
+  String? cardIssuer,
+  String? supportNumber,
+  String? comment,
+}) async {
+  try {
+    await db
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('entries')
+        .add({
+      "cardNumber": cardNumber,
+      "month": month,
+      "year": year,
+      "security": security,
+      "pin": pin ?? '',
+      "title": title,
+      "cardIssuer": cardIssuer ?? '',
+      "supportNumber": supportNumber ?? '',
+      "comment": comment ?? '',
+    }).then((value) => print('done'));
+  } catch (e) {
+    print('error adding bank');
+  }
+}
+
+Future<List<String>?> getEntries(String documentId) async {
+  try {
+    List<String> types = [];
+    List<Notes> notesList = [];
+    Entries entries = Entries();
+    QuerySnapshot querySnapshot = await db
+        .collection('users')
+        .doc(documentId)
+        .collection('entries')
+        .get();
+    querySnapshot.docs.forEach((element) {
+      types.add(element['type']);
+    });
+    return types;
+  } catch (e) {
+    print('error getting entries $e');
+  }
 }
