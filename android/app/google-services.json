@@ -12,7 +12,12 @@
           "package_name": "com.example.quirkey"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "15781080528-b0o7ircju4n82u0clj4dr2fnl36o43qn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDhL_tkFlnLyp89cx-4v4po5srFowejqxU"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15781080528-b0o7ircju4n82u0clj4dr2fnl36o43qn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "15781080528-hp74pnpc8hm4kdqms2chmogs7r4qodsr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.quirkey"
+              }
+            }
+          ]
         }
       }
     }

@@ -268,9 +268,34 @@ class SideBar extends StatelessWidget {
               log('settings');
             },
           ),
-          const Divider(
-            color: kBackgroundColor,
+          const Divider(color: kBackgroundColor),
+          ListTile(
+            leading: const Icon(
+              Icons.abc_outlined,
+              color: kBackgroundColor,
+            ),
+            title: const Text(
+              'Generate Password',
+              style: TextStyle(color: kBackgroundColor),
+            ),
+            onTap: () {
+              log('generate password');
+            },
           ),
+          ListTile(
+            leading: const Icon(
+              Icons.fact_check_outlined,
+              color: kBackgroundColor,
+            ),
+            title: const Text(
+              'Check Password',
+              style: TextStyle(color: kBackgroundColor),
+            ),
+            onTap: () {
+              log('Check Password');
+            },
+          ),
+          const Divider(color: kBackgroundColor),
           ListTile(
             leading: const Icon(
               Icons.logout_outlined,
