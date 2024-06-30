@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:quirkey/addPassword/addPassword.dart';
 import 'package:quirkey/utils/constants.dart';
 import 'package:quirkey/utils/functions.dart';
+import 'package:quirkey/utils/models.dart';
 import 'package:quirkey/utils/widgets.dart';
 import 'package:quirkey/login/login.dart';
 
@@ -21,6 +22,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String dropdownValue = "All";
   Future<void> logoutAndReturnToLogin() async {
     await FirebaseAuth.instance
         .signOut()
@@ -56,21 +58,66 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(defaultPadding),
             decoration: const BoxDecoration(color: Colors.blueGrey),
             child: Center(
-              child: FutureBuilder(
-                future: getEntries(widget.currentUser!.uid),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const CircularProgressIndicator();
-                  } else {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) =>
-                          Text(snapshot.data!.toString()),
+                child: Column(
+              children: [
+                LabeledWidget(
+                  label: 'Sort by',
+                  widget: QStringDropDown(
+                    list: const ['All', "Account", "Address", "Bank", "Notes"],
+                    value: dropdownValue,
+                    onchanged: (String? value) {
+                      setState(() {
+                        dropdownValue = value!;
+                      });
+                      print(dropdownValue);
+                    },
+                  ),
+                ),
+                const SizedBox(height: defaultPadding),
+                FutureBuilder(
+                  future: getSortedEntries(
+                    dropdownValue,
+                    widget.currentUser!.uid,
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error encountered ${snapshot.error}');
+                    }
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    final docs = snapshot.data!.docs;
+                    return RefreshIndicator(
+                      onRefresh: () async {
+                        await Future.delayed(const Duration(seconds: 1));
+                        setState(() {});
+                      },
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: docs.length,
+                        itemBuilder: (context, index) {
+                          final data =
+                              docs[index].data() as Map<String, dynamic>;
+                          final entry = Entries.fromMap(data);
+                          switch (entry.type) {
+                            case 'account':
+                              return Text(entry.type);
+                            case 'address':
+                              return Text(entry.type);
+                            case 'bank':
+                              return Text(entry.type);
+                            case 'notes':
+                              return Text(entry.type);
+                            default:
+                              return const Text('Uknown entry type');
+                          }
+                        },
+                      ),
                     );
-                  }
-                },
-              ),
-            ),
+                  },
+                ),
+              ],
+            )),
           ),
           floatingActionButton: FloatingActionButton(
               shape: const CircleBorder(),

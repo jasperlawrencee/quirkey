@@ -372,21 +372,4 @@ class _AddPasswordState extends State<AddPassword> {
       ),
     );
   }
-
-  Widget LabeledWidget({
-    required String label,
-    required Widget widget,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: defaultPadding / 4),
-        widget,
-      ],
-    );
-  }
 }

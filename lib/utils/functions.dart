@@ -90,7 +90,7 @@ Future<void> addNotesEntry({
         .add({
       "title": title,
       "type": "notes",
-      "value": notes,
+      "value": {"notes": notes},
     }).then((value) => print('done'));
   } catch (e) {
     print('error adding notes');
@@ -109,9 +109,11 @@ Future<void> addAccountEntry({
         .doc(auth.currentUser!.uid)
         .collection('entries')
         .add({
-      "details": details,
-      "login": login,
-      "password": password,
+      "value": {
+        "details": details,
+        "login": login,
+        "password": password,
+      },
       "title": title,
       "type": "account",
     }).then((value) => print('done'));
@@ -137,15 +139,17 @@ Future<void> addAddress({
         .doc(auth.currentUser!.uid)
         .collection('entries')
         .add({
-      "region": region,
-      "state": state,
-      "city": city,
-      "postalCode": postal,
-      "street": street,
+      "value": {
+        "region": region,
+        "state": state,
+        "city": city,
+        "postalCode": postal,
+        "street": street,
+        "firstName": firstname ?? '',
+        "lastName": lastname ?? '',
+        "middleName": middlename ?? '',
+      },
       "title": title,
-      "firstName": firstname ?? '',
-      "lastName": lastname ?? '',
-      "middleName": middlename ?? '',
       "type": "address",
     }).then((value) => print('done'));
   } catch (e) {
@@ -170,36 +174,64 @@ Future<void> addBank({
         .doc(auth.currentUser!.uid)
         .collection('entries')
         .add({
-      "cardNumber": cardNumber,
-      "month": month,
-      "year": year,
-      "security": security,
-      "pin": pin ?? '',
       "title": title,
-      "cardIssuer": cardIssuer ?? '',
-      "supportNumber": supportNumber ?? '',
-      "comment": comment ?? '',
+      "type": "bank",
+      "value": {
+        "cardNumber": cardNumber,
+        "month": month,
+        "year": year,
+        "security": security,
+        "pin": pin ?? '',
+        "cardIssuer": cardIssuer ?? '',
+        "supportNumber": supportNumber ?? '',
+        "comment": comment ?? '',
+      },
     }).then((value) => print('done'));
   } catch (e) {
     print('error adding bank');
   }
 }
 
-Future<List<String>?> getEntries(String documentId) async {
+Future<List<Entries>> getEntries(String documentId) async {
   try {
-    List<String> types = [];
-    List<Notes> notesList = [];
-    Entries entries = Entries();
+    List<Entries> entries = [];
     QuerySnapshot querySnapshot = await db
         .collection('users')
         .doc(documentId)
         .collection('entries')
         .get();
     querySnapshot.docs.forEach((element) {
-      types.add(element['type']);
+      entries.add(Entries(
+        title: element['title'],
+        type: element['type'],
+        entry: element['value'],
+      ));
     });
-    return types;
+    return entries;
   } catch (e) {
     print('error getting entries $e');
+    return [];
+  }
+}
+
+Future<QuerySnapshot?> getSortedEntries(String type, String documentId) async {
+  try {
+    if (type.toLowerCase() == 'all') {
+      return await db
+          .collection('users')
+          .doc(documentId)
+          .collection('entries')
+          .get();
+    } else {
+      return await db
+          .collection('users')
+          .doc(documentId)
+          .collection('entries')
+          .where('type', isEqualTo: type)
+          .get();
+    }
+  } catch (e) {
+    print('error getting entires $e');
+    return null;
   }
 }

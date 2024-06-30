@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quirkey/utils/constants.dart';
 import 'package:quirkey/features/firebase_services.dart';
@@ -32,9 +34,38 @@ class _SignupPageState extends State<SignupPage> {
           'role': "customer"
         });
       });
-    } catch (e) {
-      log('error signing up $e');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        log('Password provided too weak');
+        throw ('Password too weak');
+      } else if (e.code == 'email-already-in-use') {
+        log('account with that email already exists');
+        throw ('Email already exists');
+      }
     }
+  }
+
+  String? verifyEmail(String? input) {
+    if (input?.isEmpty ?? true) {
+      return "Email cannot be empty";
+    }
+    if (!input!.contains('@')) {
+      return 'Invalid email format';
+    }
+    if (!input.endsWith('.com')) {
+      return 'Invalid email domain';
+    }
+    return null;
+  }
+
+  String? verifyPassword(String? input) {
+    if (input?.isEmpty ?? true) {
+      return 'Password cannot be empty';
+    }
+    if (input!.length < 6) {
+      return 'Password length must be greater than 6';
+    }
+    return null;
   }
 
   @override
@@ -62,11 +93,14 @@ class _SignupPageState extends State<SignupPage> {
                     children: [
                       const SizedBox(height: defaultPadding),
                       QTextField(
+                          validator: (p0) => verifyEmail(emailController.text),
                           controller: emailController,
                           hintText: "Email",
                           isPassword: false),
                       const SizedBox(height: defaultPadding),
                       QTextField(
+                          validator: (p0) =>
+                              verifyPassword(passwordController.text),
                           controller: passwordController,
                           hintText: "Password",
                           isPassword: true),
@@ -74,7 +108,11 @@ class _SignupPageState extends State<SignupPage> {
                     ],
                   )),
               ElevatedButton(
-                  onPressed: createUser,
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      createUser();
+                    }
+                  },
                   child: const Text(
                     'Register Account',
                     style: TextStyle(color: kPrimaryColor),

@@ -22,7 +22,7 @@ var countryList = [
   "Andorra",
   "Angola",
   "Anguilla",
-  "Antigua &amp; Barbuda",
+  "Antigua & Barbuda",
   "Argentina",
   "Armenia",
   "Aruba",
