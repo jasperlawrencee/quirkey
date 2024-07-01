@@ -69,7 +69,6 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         dropdownValue = value!;
                       });
-                      print(dropdownValue);
                     },
                   ),
                 ),
@@ -87,31 +86,45 @@ class _HomePageState extends State<HomePage> {
                       return const Center(child: CircularProgressIndicator());
                     }
                     final docs = snapshot.data!.docs;
-                    return RefreshIndicator(
-                      onRefresh: () async {
-                        await Future.delayed(const Duration(seconds: 1));
-                        setState(() {});
-                      },
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: docs.length,
-                        itemBuilder: (context, index) {
-                          final data =
-                              docs[index].data() as Map<String, dynamic>;
-                          final entry = Entries.fromMap(data);
-                          switch (entry.type) {
-                            case 'account':
-                              return Text(entry.type);
-                            case 'address':
-                              return Text(entry.type);
-                            case 'bank':
-                              return Text(entry.type);
-                            case 'notes':
-                              return Text(entry.type);
-                            default:
-                              return const Text('Uknown entry type');
-                          }
+                    print(docs.length);
+                    return Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          //simulate refresh duration
+                          await Future.delayed(const Duration(seconds: 1));
+                          setState(() {});
                         },
+                        child: ListView.builder(
+                          // shrinkWrap: true,
+                          itemCount: docs.length + 1,
+                          itemBuilder: (context, index) {
+                            if (index == docs.length) {
+                              return AddEntryCard(
+                                currentUser: widget.currentUser,
+                              );
+                            } else {
+                              final data =
+                                  docs[index].data() as Map<String, dynamic>;
+                              final entry = Entries.fromMap(data);
+                              switch (entry.type) {
+                                case 'account':
+                                  return EntryCard(
+                                      title: entry.title, type: entry.type);
+                                case 'address':
+                                  return EntryCard(
+                                      title: entry.title, type: entry.type);
+                                case 'bank':
+                                  return EntryCard(
+                                      title: entry.title, type: entry.type);
+                                case 'notes':
+                                  return EntryCard(
+                                      title: entry.title, type: entry.type);
+                                default:
+                                  return const Text('Uknown entry type');
+                              }
+                            }
+                          },
+                        ),
                       ),
                     );
                   },

@@ -75,6 +75,7 @@ class _AddPasswordState extends State<AddPassword> {
                       passwordController.clear();
                       detailsController.clear();
                       Navigator.pop(context);
+                      showToast('Added Account Entry!');
                       setState(() {});
                     });
                   } else if (typesDropdownValue.toLowerCase() == 'address' &&
@@ -95,6 +96,7 @@ class _AddPasswordState extends State<AddPassword> {
                       cityController.clear();
                       postalCodeController.clear();
                       streetController.clear();
+                      showToast('Added Address Entry!');
                       Navigator.pop(context);
                       setState(() {});
                     });
@@ -123,6 +125,7 @@ class _AddPasswordState extends State<AddPassword> {
                       commentController.clear();
                       pinController.clear();
                       customerPhoneController.clear();
+                      showToast('Added Bank Entry!');
                       Navigator.pop(context);
                       setState(() {});
                     });
@@ -134,6 +137,7 @@ class _AddPasswordState extends State<AddPassword> {
                             title: title)
                         .then((value) {
                       notesController.clear();
+                      showToast('Added Notes Entry!');
                       Navigator.pop(context);
                       setState(() {});
                     });
@@ -152,7 +156,34 @@ class _AddPasswordState extends State<AddPassword> {
             children: [
               InkWell(
                 onTap: () {
-                  log('pressed title');
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      titleController.addListener(() {
+                        setState(() {
+                          title = titleController.text;
+                        });
+                      });
+                      return AlertDialog(
+                        title: const Text('Title'),
+                        content: TextField(
+                          maxLength: 15,
+                          controller: titleController,
+                          style: const TextStyle(color: kBackgroundColor),
+                          decoration:
+                              const InputDecoration(hintText: "Entry Title"),
+                        ),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Edit'))
+                        ],
+                      );
+                    },
+                  );
                 },
                 child: Wrap(
                   direction: Axis.horizontal,

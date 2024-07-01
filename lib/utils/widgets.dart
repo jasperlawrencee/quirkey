@@ -2,9 +2,12 @@
 
 import 'dart:developer';
 
+import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:quirkey/addPassword/addPassword.dart';
 import 'package:quirkey/utils/constants.dart';
 import 'package:quirkey/utils/functions.dart';
 import 'package:quirkey/login/login.dart';
@@ -339,4 +342,95 @@ Widget LabeledWidget({
       widget,
     ],
   );
+}
+
+class EntryCard extends StatelessWidget {
+  String title;
+  String type;
+  EntryCard({
+    super.key,
+    required this.title,
+    required this.type,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        decoration: const BoxDecoration(
+            color: kPrimaryColor,
+            borderRadius:
+                BorderRadius.all(Radius.circular(defaultPadding / 4))),
+        margin: const EdgeInsets.only(bottom: defaultPadding / 2),
+        width: double.infinity,
+        height:
+            MediaQuery.of(context).size.height * 0.10, //10% of screen height
+        padding: const EdgeInsets.all(defaultPadding),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(title, style: const TextStyle(color: kBackgroundColor)),
+                Text(toUppercaseFirstCharacter(type)!,
+                    style: const TextStyle(color: kBackgroundColor)),
+              ],
+            ),
+            InkWell(
+                onTap: () {
+                  log('show entry');
+                },
+                child: const Text(
+                  'View Entry',
+                  style: TextStyle(
+                    color: kPrimaryDarkColor,
+                    decoration: TextDecoration.underline,
+                    decorationColor: kPrimaryDarkColor,
+                  ),
+                )),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class AddEntryCard extends StatelessWidget {
+  User? currentUser;
+  AddEntryCard({
+    super.key,
+    required this.currentUser,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => AddPassword(
+                currentUser: currentUser,
+              ),
+            ));
+      },
+      child: DottedBorder(
+        color: kPrimaryDarkColor,
+        child: Container(
+          decoration: const BoxDecoration(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(defaultPadding / 4))),
+          width: double.infinity,
+          height:
+              MediaQuery.of(context).size.height * 0.10, //10% of screen height
+          child: const Center(
+            child: Text('Add +'),
+          ),
+        ),
+      ),
+    );
+  }
 }

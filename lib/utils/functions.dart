@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:quirkey/utils/constants.dart';
 import 'package:quirkey/utils/models.dart';
 
@@ -192,28 +193,6 @@ Future<void> addBank({
   }
 }
 
-Future<List<Entries>> getEntries(String documentId) async {
-  try {
-    List<Entries> entries = [];
-    QuerySnapshot querySnapshot = await db
-        .collection('users')
-        .doc(documentId)
-        .collection('entries')
-        .get();
-    querySnapshot.docs.forEach((element) {
-      entries.add(Entries(
-        title: element['title'],
-        type: element['type'],
-        entry: element['value'],
-      ));
-    });
-    return entries;
-  } catch (e) {
-    print('error getting entries $e');
-    return [];
-  }
-}
-
 Future<QuerySnapshot?> getSortedEntries(String type, String documentId) async {
   try {
     if (type.toLowerCase() == 'all') {
@@ -222,16 +201,35 @@ Future<QuerySnapshot?> getSortedEntries(String type, String documentId) async {
           .doc(documentId)
           .collection('entries')
           .get();
-    } else {
+    } else if (type == type) {
       return await db
           .collection('users')
           .doc(documentId)
           .collection('entries')
-          .where('type', isEqualTo: type)
+          .where('type', isEqualTo: type.toLowerCase())
           .get();
     }
   } catch (e) {
     print('error getting entires $e');
     return null;
   }
+}
+
+Future<void> showToast(String text) async {
+  await Fluttertoast.showToast(
+    msg: text,
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.BOTTOM,
+    backgroundColor: kPrimaryDarkColor,
+    textColor: kBackgroundColor,
+    fontSize: 16,
+  );
+}
+
+String? toUppercaseFirstCharacter(String input) {
+  if (input.isEmpty) return null;
+  var firstChar = input[0].toUpperCase(); //uppercases the first letter only
+  var remainingChars =
+      input.substring(1); //gets the remaining strings of the input
+  return firstChar + remainingChars;
 }
