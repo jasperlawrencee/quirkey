@@ -33,6 +33,7 @@ class _GeneratePasswordState extends State<GeneratePassword> {
   final TextEditingController characterCountController =
       TextEditingController();
 
+  //returns a string value of each character setting if switches are given true
   String passwordCharacterSet() {
     String charSet = "";
     if (lowercase) charSet += "abcdefghijklmnopqrstuvwxyz";
@@ -42,6 +43,8 @@ class _GeneratePasswordState extends State<GeneratePassword> {
     return charSet;
   }
 
+  //validates all switches that should be at least one true
+  //BUG
   bool settingChecker() {
     List<bool> booleans = [lowercase, uppercase, numbers, specials];
     return booleans.any((element) => element);

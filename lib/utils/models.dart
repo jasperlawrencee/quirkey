@@ -15,3 +15,5 @@ class Entries {
         entry: map['value'] as Map<String, dynamic>,
       );
 }
+
+enum PasswordStrength { weak, medium, strong, veryStrong }

@@ -83,7 +83,6 @@ class _HomePageState extends State<HomePage> {
                           setState(() {});
                         },
                         child: ListView.builder(
-                          // shrinkWrap: true,
                           itemCount: docs.length + 1,
                           itemBuilder: (context, index) {
                             if (index == docs.length) {

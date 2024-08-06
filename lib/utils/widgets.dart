@@ -303,24 +303,24 @@ class SideBar extends StatelessWidget {
                   ));
             },
           ),
-          // ListTile(
-          //   leading: const Icon(
-          //     Icons.fact_check_outlined,
-          //     color: kBackgroundColor,
-          //   ),
-          //   title: const Text(
-          //     'Check Password',
-          //     style: TextStyle(color: kBackgroundColor),
-          //   ),
-          //   onTap: () {
-          //     Navigator.pushReplacement(
-          //         context,
-          //         CupertinoPageRoute(
-          //           builder: (context) =>
-          //               CheckPassword(currentUser: currentUser),
-          //         ));
-          //   },
-          // ),
+          ListTile(
+            leading: const Icon(
+              Icons.fact_check_outlined,
+              color: kBackgroundColor,
+            ),
+            title: const Text(
+              'Check Password',
+              style: TextStyle(color: kBackgroundColor),
+            ),
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) =>
+                        CheckPassword(currentUser: currentUser),
+                  ));
+            },
+          ),
           const Divider(color: kBackgroundColor),
           ListTile(
             leading: const Icon(
